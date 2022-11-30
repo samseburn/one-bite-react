@@ -1,15 +1,27 @@
-import './App.css';
+// import './App.css';
+
+import Container from './Container';
+import MyHeader from './MyHeader';
+import MyFooter from './MyFooter';
+import Counter from './Counter';
 
 function App() {
-  let name = "고석영";
+	const counterProps = {
+		a: 1,
+		b: 2,
+		c: 3,
+		d: 4,
+	};
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h3>안녕 리액트, {name}</h3>
-      </header>
-    </div>
-  );
+	return (
+		<Container>
+			<div>
+				<MyHeader />
+				<Counter {...counterProps} />
+				<MyFooter />
+			</div>
+		</Container>
+	);
 }
 
 export default App;
