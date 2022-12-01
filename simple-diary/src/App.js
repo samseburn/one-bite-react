@@ -22,7 +22,7 @@ function App() {
 		setData([newItem, ...data]); // 최신순 배치
 	};
 
-	const onDelete = targetId => {
+	const onRemove = targetId => {
 		console.log(`${targetId}가 삭제되었습니다.`);
 		const newDirayList = data.filter(item => item.id !== targetId);
 		setData(newDirayList);
@@ -31,7 +31,7 @@ function App() {
 	return (
 		<div className="App">
 			<DiaryEditor onCreate={onCreate} />
-			<DiaryList diaryList={data} onDelete={onDelete} />
+			<DiaryList diaryList={data} onRemove={onRemove} />
 		</div>
 	);
 }
