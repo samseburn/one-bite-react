@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-const DiaryEditor = () => {
+const DiaryEditor = ({ onCreate }) => {
 	const authorInput = useRef();
 	const contentInput = useRef();
 
@@ -33,7 +33,16 @@ const DiaryEditor = () => {
 			contentInput.current.focus();
 			return;
 		}
+
+		onCreate(state.author, state.content, state.emotion);
 		alert('저장 성공');
+
+		// 일기를 정상적으로 저장했다면 setState 기본값 초기화
+		setState({
+			author: '',
+			content: '',
+			emotion: 1,
+		});
 	};
 
 	return (

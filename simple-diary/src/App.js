@@ -1,50 +1,31 @@
+import { useRef, useState } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 
-const dummyList = [
-	{
-		id: 1,
-		author: '장만옥..',
-		content: '일기 1',
-		emotion: 5,
-		created_date: new Date().getTime(),
-	},
-	{
-		id: 2,
-		author: '웬디..',
-		content: '일기 2',
-		emotion: 4,
-		created_date: new Date().getTime(),
-	},
-	{
-		id: 3,
-		author: '김태리..',
-		content: '일기 3',
-		emotion: 3,
-		created_date: new Date().getTime(),
-	},
-	{
-		id: 4,
-		author: '탕웨이..',
-		content: '일기 4',
-		emotion: 2,
-		created_date: new Date().getTime(),
-	},
-	{
-		id: 5,
-		author: '조이..',
-		content: '일기 5',
-		emotion: 1,
-		created_date: new Date().getTime(),
-	},
-];
-
 function App() {
+	// 일기 데이터 저장할 빈 배열 생성
+	const [data, setData] = useState([]);
+
+	const dataId = useRef();
+
+	const onCreate = (author, content, emotion) => {
+		const created_date = new Date().getTime();
+		const newItem = {
+			author,
+			content,
+			emotion,
+			created_date,
+			id: dataId.current,
+		};
+		dataId.current += 1;
+		setData([newItem, ...data]); // 최신순 배치
+	};
+
 	return (
 		<div className="App">
-			<DiaryEditor />
-			<DiaryList diaryList={dummyList} />
+			<DiaryEditor onCreate={onCreate} />
+			<DiaryList diaryList={data} />
 		</div>
 	);
 }
