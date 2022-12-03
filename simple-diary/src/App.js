@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
+import Lifecycle from './Lifecycle';
 
 function App() {
 	// 일기 데이터 저장할 빈 배열 생성
@@ -39,6 +40,7 @@ function App() {
 
 	return (
 		<div className="App">
+			<Lifecycle />
 			<DiaryEditor onCreate={onCreate} />
 			<DiaryList diaryList={data} onRemove={onRemove} onEdit={onEdit} />
 		</div>
