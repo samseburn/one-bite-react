@@ -1,7 +1,7 @@
 import DiaryItem from './DiaryItem';
 
 const DiaryList = props => {
-	const { diaryList, onRemove } = props;
+	const { diaryList, onRemove, onEdit } = props;
 
 	return (
 		<div className="DiaryList">
@@ -9,7 +9,12 @@ const DiaryList = props => {
 			<h4>{diaryList.length}개의 일기가 있습니다.</h4>
 			<div>
 				{diaryList.map(item => (
-					<DiaryItem key={item.id} {...item} onRemove={onRemove} />
+					<DiaryItem
+						key={item.id}
+						{...item}
+						onRemove={onRemove}
+						onEdit={onEdit}
+					/>
 				))}
 			</div>
 		</div>
