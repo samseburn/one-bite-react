@@ -22,11 +22,12 @@ function App() {
 				author: item.email,
 				content: item.body,
 				emotion: Math.floor(Math.random() * 5) + 1,
-				created_date: new Date().getTime(),
+				created_date: new Date().getTime() + 1,
 				id: dataId.current++,
 			};
 		});
 		console.log(initData);
+		setData(initData);
 	};
 
 	useEffect(() => {
