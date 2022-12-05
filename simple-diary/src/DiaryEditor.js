@@ -1,8 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const DiaryEditor = ({ onCreate }) => {
+	// useEffect로 렌더링 업데이트 감시
+	useEffect(() => {
+		console.log('DiaryEditor 렌더');
+	});
+
 	const authorInput = useRef();
-	const contentInput = useRef();
+	const contentInput = useRef('');
 
 	const [state, setState] = useState({
 		author: '',
@@ -23,13 +28,11 @@ const DiaryEditor = ({ onCreate }) => {
 		// console.log(state);
 
 		if (state.author.length < 1) {
-			// focus
 			authorInput.current.focus();
 			return;
 		}
 
 		if (state.content.length < 5) {
-			// focus
 			contentInput.current.focus();
 			return;
 		}
@@ -85,4 +88,4 @@ const DiaryEditor = ({ onCreate }) => {
 	);
 };
 
-export default DiaryEditor;
+export default React.memo(DiaryEditor);
