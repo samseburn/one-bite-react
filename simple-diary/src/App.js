@@ -1,12 +1,41 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 
-function App() {
-	// 일기 데이터 저장할 빈 배열 생성
-	const [data, setData] = useState([]);
+// 복잡한 상태 변화 로직을 컴포넌트 밖으로 분리하기 위함이므로 밖에 작성
+const reducer = (state, action) => {
+	switch (action.type) {
+		// getData -> 데이터 초기화 iniData -> initAction
+		case 'INIT': {
+			console.log('::INIT::');
+			return action.data;
+		}
+		case 'CREATE': {
+			const created_date = new Date().getTime();
+			const newItem = { ...action.data, created_date };
+			console.log('::UPDATE::');
+			return [newItem, ...state];
+		}
+		case 'REMOVE': {
+			console.log('::REMOVE::');
+			return state.filter(item => item.id !== action.targetId);
+		}
+		case 'EDIT': {
+			console.log('::EDIT::');
+			return state.map(item =>
+				item.id === action.targetId
+					? { ...item, content: action.newContent }
+					: item,
+			);
+		}
+		default:
+			return state;
+	}
+};
 
+function App() {
+	const [data, dispatch] = useReducer(reducer, []);
 	const dataId = useRef(1);
 
 	const getData = async () => {
@@ -23,8 +52,8 @@ function App() {
 				id: dataId.current++,
 			};
 		});
-		// console.log(initData);
-		setData(initData);
+
+		dispatch({ type: 'INIT', data: initData });
 	};
 
 	useEffect(() => {
@@ -32,30 +61,21 @@ function App() {
 	}, []);
 
 	const onCreate = useCallback((author, content, emotion) => {
-		const created_date = new Date().getTime();
-		const newItem = {
-			author,
-			content,
-			emotion,
-			created_date,
-			id: dataId.current,
-		};
+		dispatch({
+			type: 'CREATE',
+			data: { author, content, emotion, id: dataId.current },
+		});
+
 		dataId.current += 1;
-		setData(data => [newItem, ...data]); // 최신순 배치
 	}, []);
 
 	const onRemove = useCallback(targetId => {
-		// console.log(`${targetId}가 삭제되었습니다.`);
-		setData(data => data.filter(item => item.id !== targetId));
+		dispatch({ type: 'REMOVE', targetId });
 	}, []); // targetId --> DirayItem에서 id
 
 	// 수정
 	const onEdit = useCallback((targetId, newContent) => {
-		setData(data => {
-			data.map(item =>
-				item.id === targetId ? { ...item, content: newContent } : item,
-			);
-		});
+		dispatch({ type: 'EDIT', targetId, newContent });
 	}, []);
 
 	// 감정 점수를 필터링하여 카운팅
