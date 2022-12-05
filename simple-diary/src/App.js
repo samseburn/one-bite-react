@@ -44,25 +44,27 @@ function App() {
 		setData(data => [newItem, ...data]); // 최신순 배치
 	}, []);
 
-	const onRemove = targetId => {
+	const onRemove = useCallback(targetId => {
 		// console.log(`${targetId}가 삭제되었습니다.`);
-		const newDirayList = data.filter(item => item.id !== targetId);
-		setData(newDirayList);
-	}; // targetId --> DirayItem에서 id
+		setData(data => data.filter(item => item.id !== targetId));
+	}, []); // targetId --> DirayItem에서 id
 
 	// 수정
-	const onEdit = (targetId, newContent) => {
-		setData(
+	const onEdit = useCallback((targetId, newContent) => {
+		setData(data => {
 			data.map(item =>
 				item.id === targetId ? { ...item, content: newContent } : item,
-			),
-		);
-	};
+			);
+		});
+	}, []);
 
 	// 감정 점수를 필터링하여 카운팅
 	// useMemo를 사용하여 함수를 최적화하게 되며,
 	// 함수는 더이상 함수가 아니고 값을 반환하게 됨 여기에서는 객체 {goodCout, badCount, goodRatio}
 	const getDiaryAnalysis = useMemo(() => {
+		if (data.length === 0) {
+			return { goodcount: 0, badCount: 0, goodRatio: 0 };
+		}
 		// console.log('일기 분석 시작');
 
 		// 3점을 기준으로 감정 점수 분류
