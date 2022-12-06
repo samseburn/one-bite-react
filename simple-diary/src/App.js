@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useReducer,
+	useRef,
+} from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
@@ -34,7 +40,11 @@ const reducer = (state, action) => {
 	}
 };
 
-function App() {
+export const DiaryStateContext = React.createContext();
+
+export const DiaryDispatchContext = React.createContext();
+
+const App = () => {
 	const [data, dispatch] = useReducer(reducer, []);
 	const dataId = useRef(1);
 
@@ -78,6 +88,10 @@ function App() {
 		dispatch({ type: 'EDIT', targetId, newContent });
 	}, []);
 
+	const memoizedDispatches = useMemo(() => {
+		return { onCreate, onRemove, onEdit };
+	}, []);
+
 	// 감정 점수를 필터링하여 카운팅
 	// useMemo를 사용하여 함수를 최적화하게 되며,
 	// 함수는 더이상 함수가 아니고 값을 반환하게 됨 여기에서는 객체 {goodCout, badCount, goodRatio}
@@ -103,15 +117,19 @@ function App() {
 	const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
 
 	return (
-		<div className="App">
-			<DiaryEditor onCreate={onCreate} />
-			<div>전체 일기 : {data.length}</div>
-			<div>기분 좋은 일기 개수: {goodCount}</div>
-			<div>기분 나쁜 일기 개수: {badCount}</div>
-			<div>기분 좋은 일기 비율: {goodRatio}</div>
-			<DiaryList diaryList={data} onRemove={onRemove} onEdit={onEdit} />
-		</div>
+		<DiaryStateContext.Provider value={data}>
+			<DiaryDispatchContext.Provider value={memoizedDispatches}>
+				<div className="App">
+					<DiaryEditor />
+					<div>전체 일기 : {data.length}</div>
+					<div>기분 좋은 일기 개수: {goodCount}</div>
+					<div>기분 나쁜 일기 개수: {badCount}</div>
+					<div>기분 좋은 일기 비율: {goodRatio}</div>
+					<DiaryList />
+				</div>
+			</DiaryDispatchContext.Provider>
+		</DiaryStateContext.Provider>
 	);
-}
+};
 
 export default App;
