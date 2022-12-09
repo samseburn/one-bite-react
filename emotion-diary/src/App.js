@@ -21,23 +21,22 @@ const reducer = (state, action) => {
 		}
 		case 'CREATE': {
 			// const newItem = { ...action.data };
-			newState = [action.data, ...state];
-			break;
+			return (newState = [action.data, ...state]);
+			break; // NOTE
 		}
 		case 'REMOVE': {
-			newState = state.filter(item => item.id !== action.targetId);
-			break;
+			return (newState = state.filter(item => item.id !== action.targetId));
+			break; // NOTE
 		}
 		case 'EDIT': {
-			newState = state.map(item =>
+			return (newState = state.map(item =>
 				item.id === action.data.id ? { ...action.data } : item,
-			);
-			break;
+			));
+			break; // NOTE
 		}
 		default:
 			return state;
 	}
-	return state;
 };
 
 export const DiaryStateContext = React.createContext();
