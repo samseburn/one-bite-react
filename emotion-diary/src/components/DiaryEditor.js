@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DiaryDispatchContext } from '../App';
 
@@ -17,9 +17,9 @@ const DiaryEditor = ({ isEdit, originData }) => {
 
 	const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
 
-	const handleClickEmote = emotion => {
+	const handleClickEmote = useCallback(emotion => {
 		setEmotion(emotion);
-	};
+	}, []);
 
 	const navigate = useNavigate();
 
