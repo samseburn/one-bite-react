@@ -40,9 +40,6 @@ const DiaryEditor = ({ isEdit, originData }) => {
 				onEdit(originData.id, date, content, emotion);
 			}
 		}
-		console.log(date, content, emotion);
-		console.log(onCreate);
-		onCreate(date, content, emotion);
 		navigate('/', { replace: true });
 	};
 
